@@ -41,11 +41,11 @@ StellarSplit is part of the **Stellar Drips Wave Program**! This means you can e
 
 ```bash
 # Fork the repository on GitHub, then:
-git clone https://github.com/YOUR_USERNAME/stellarsplit.git
+git clone https://github.com/OlufunbiIK/stellarsplit
 cd stellarsplit
 
 # Add upstream remote
-git remote add upstream https://github.com/ORIGINAL_OWNER/stellarsplit.git
+git remote add upstream https://github.com/OlufunbiIK/stellarsplit
 ```
 
 ### 2. Set Up Your Environment
@@ -361,7 +361,7 @@ git push origin --delete feature/your-feature-name
 
 ### Before Reporting
 
-- Check [existing issues](https://github.com/yourusername/stellarsplit/issues)
+- Check [existing issues](https://github.com/OlufunbiIK/stellarsplit/issues)
 - Try the latest version
 - Test on different devices/browsers
 - Search Discord/community channels
@@ -535,9 +535,9 @@ Violations can be reported to maintainers at conduct@stellarsplit.app. All compl
 
 **Stuck? Need clarification?**
 
-- 💬 [Join our Discord](https://discord.gg/stellarsplit)
+- 💬 [Join our Discord] https://discord.gg/mpzbyTY6
 - 📧 Email: dev@stellarsplit.app
-- 🐦 Twitter: [@StellarSplit](https://twitter.com/stellarsplit)
+- 🐦 Twitter: [[@StellarSplit] https://web.telegram.org/k/#-5269864612
 - 📖 [Documentation](https://docs.stellarsplit.app)
 
 **For Drips Wave specific questions:**
