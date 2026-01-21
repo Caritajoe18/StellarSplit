@@ -6,7 +6,7 @@ import { ReceiptImage } from '../../components/Receipt/ReceiptImage';
 import { PaymentButton } from '../../components/Payment/PaymentButton';
 import { PaymentModal } from '../../components/Payment/PaymentModal';
 import { ShareModal } from '../../components/Split/ShareModal';
-import { Split } from '../../types';
+import type { Split } from '../../types';
 
 // Mock Data
 const MOCK_SPLIT: Split = {

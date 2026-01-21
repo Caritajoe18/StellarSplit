@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import { Split } from '../../types';
+import type { Split } from '../../types';
 
 interface SplitHeaderProps {
     split: Split;

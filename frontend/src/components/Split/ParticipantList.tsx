@@ -1,5 +1,5 @@
-import { CheckCircle2, Clock } from 'lucide-react';
-import { Participant } from '../../types';
+import { CheckCircle2 } from 'lucide-react';
+import type { Participant } from '../../types';
 
 interface ParticipantListProps {
     participants: Participant[];
