@@ -27,6 +27,15 @@ const router = createBrowserRouter([
           return { Component: SplitDetailPage };
         },
       },
+      {
+        path: "/analytics",
+        lazy: async () => {
+          const { default: AnalyticsDashboard } = await import(
+            "./pages/AnalyticsDashboard"
+          );
+          return { Component: AnalyticsDashboard };
+        },
+      },
     ],
   },
 ]);
