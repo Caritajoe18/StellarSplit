@@ -3,10 +3,11 @@ import { ROUTES } from "../constants/routes";
 import { WalletButton } from "./wallet-button";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSelector } from "./LanguageSelector";
+import { NotificationBell } from "./Notifications";
 
 export default function Navbar() {
   return (
-    <nav className="flex justify-between items-center w-full mb-10">
+    <nav className="flex justify-between items-center w-full mb-10 flex-wrap gap-4">
       <div className="flex gap-4">
         {ROUTES.map((route) => (
           <NavLink
@@ -20,8 +21,9 @@ export default function Navbar() {
       </div>
       <NavLink to="/">GitHub</NavLink>
       <div className="flex gap-3 items-center">
+        <NotificationBell />
         <LanguageSelector />
-        <ThemeToggle /> {/* 👈 sits next to the wallet button */}
+        <ThemeToggle />
         <WalletButton>Connect Wallet</WalletButton>
       </div>
     </nav>
