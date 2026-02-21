@@ -15,7 +15,11 @@ export const ROUTES = [
     to: "/split-groups",
     label: "Split Groups",
   {
-    to: "/notifications",
-    label: "Notifications",
+    to: "/history",
+    label: "History",
   },
+  {
+     to: "/notifications",
+    label: "Notifications",
+  }
 ];
