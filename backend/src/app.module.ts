@@ -29,6 +29,7 @@ import { SplitCommentsModule } from './split-comments/split-comments.module';
 import { AnalyticsModule } from "./analytics/analytics.module";
 // import { ExportModule } from './export/export.module';
 import { WebhooksModule } from "./webhooks/webhooks.module";
+import { DisputesModule } from './disputes/disputes.module';
 import { FraudDetectionModule } from "./fraud-detection/fraud-detection.module";
 import { BatchModule } from "./batch/batch.module";
 // Load environment variables
@@ -99,6 +100,8 @@ dotenv.config({
     // ExportModule, // Temporarily disabled - has TypeScript errors
     // Webhooks module for external event notifications
     WebhooksModule,
+    // Dispute resolution system for split conflicts
+    DisputesModule,
     // Fraud detection module with ML-based detection
     FraudDetectionModule,
     // Batch processing module for bulk operations
