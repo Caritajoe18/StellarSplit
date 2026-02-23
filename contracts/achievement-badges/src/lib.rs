@@ -134,6 +134,6 @@ impl AchievementBadgesContract {
         env: Env,
         badge_type: BadgeType,
     ) -> BadgeMetadata {
-        storage::get_badge_metadata(&badge_type)
+        storage::get_badge_metadata(&env, &badge_type)
     }
 }
