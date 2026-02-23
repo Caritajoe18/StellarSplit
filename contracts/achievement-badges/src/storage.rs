@@ -35,11 +35,11 @@ pub fn has_admin(env: &Env) -> bool {
 }
 
 /// Get the next token ID and increment the counter
-pub fn get_next_token_id(env: &Env) -> String {
+pub fn get_next_token_id(env: &Env) -> u64 {
     let current_id = env.storage().instance().get(&NEXT_TOKEN_ID).unwrap_or(0u64);
     let next_id = current_id + 1;
     env.storage().instance().set(&NEXT_TOKEN_ID, &next_id);
-    format!("{}", current_id + 1)
+    next_id
 }
 
 /// Check if a user has already minted a specific badge

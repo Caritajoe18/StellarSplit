@@ -30,13 +30,13 @@ pub struct BadgeMetadata {
 #[derive(Clone, Debug)]
 pub struct UserBadge {
     pub badge_type: BadgeType,
-    pub token_id: String,
+    pub token_id: u64,
     pub minted_at: u64,
 }
 
 /// Error types for the contract
 #[contracterror]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum BadgeError {
     AlreadyMinted = 1,
     NotEligible = 2,

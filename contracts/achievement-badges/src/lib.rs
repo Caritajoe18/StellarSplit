@@ -6,7 +6,7 @@
 #![no_std]
 
 use soroban_sdk::{
-    contract, contractimpl, Address, Env, String, Vec,
+    contract, contractimpl, Address, Env, String, Vec, panic_with_error,
 };
 
 mod events;
