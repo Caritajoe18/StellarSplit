@@ -87,6 +87,173 @@ pub struct Split {
 
 /// Contract errors
 #[contracterror]
+/// Rewards status for user rewards
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub enum RewardsStatus {
+    Active = 0,
+    Claimed = 1,
+    Suspended = 2,
+}
+
+/// User rewards data structure
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct UserRewards {
+    pub user: Address,
+    pub total_splits_created: u64,
+    pub total_splits_participated: u64,
+    pub total_amount_transacted: i128,
+    pub rewards_earned: i128,
+    pub rewards_claimed: i128,
+    pub last_activity: u64,
+    pub status: RewardsStatus,
+}
+
+/// User activity tracking for rewards calculation
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct UserActivity {
+    pub user: Address,
+    pub activity_type: ActivityType,
+    pub split_id: u64,
+    pub amount: i128,
+    pub timestamp: u64,
+}
+
+/// Types of activities that earn rewards
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub enum ActivityType {
+    SplitCreated = 0,
+    SplitParticipated = 1,
+    DepositMade = 2,
+    SplitCompleted = 3,
+}
+
+/// Verification status for split legitimacy
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub enum VerificationStatus {
+    Pending = 0,
+    Verified = 1,
+    Rejected = 2,
+    Expired = 3,
+}
+
+/// Verification request for split legitimacy
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct VerificationRequest {
+    pub verification_id: String,
+    pub split_id: String,
+    pub requester: Address,
+    pub receipt_hash: String,
+    pub evidence_url: Option<String>,
+    pub submitted_at: u64,
+    pub status: VerificationStatus,
+    pub verified_by: Option<Address>,
+    pub verified_at: Option<u64>,
+    pub rejection_reason: Option<String>,
+}
+
+/// Oracle configuration and settings
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct OracleConfig {
+    pub required_verifications: u32,
+    pub verification_timeout: u64,
+    pub min_oracles: u32,
+    pub oracle_addresses: Vec<Address>,
+}
+
+/// Atomic swap status
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub enum SwapStatus {
+    Pending = 0,
+    Completed = 1,
+    Refunded = 2,
+    Expired = 3,
+}
+
+/// Atomic swap contract for instant settlements
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct AtomicSwap {
+    pub swap_id: String,
+    pub participant_a: Address,
+    pub participant_b: Address,
+    pub amount_a: i128,
+    pub amount_b: i128,
+    pub hash_lock: String,
+    pub secret: Option<String>,
+    pub time_lock: u64,
+    pub created_at: u64,
+    pub status: SwapStatus,
+    pub completed_at: Option<u64>,
+}
+
+/// Oracle node information
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct OracleNode {
+    pub oracle_address: Address,
+    pub stake: i128,
+    pub reputation: u64,
+    pub submissions_count: u64,
+    pub last_submission: u64,
+    pub active: bool,
+}
+
+/// Price submission from oracle
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct PriceSubmission {
+    pub oracle_address: Address,
+    pub asset_pair: String,
+    pub price: i128,
+    pub timestamp: u64,
+    pub signature: String,
+}
+
+/// Consensus price data
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct ConsensusPrice {
+    pub asset_pair: String,
+    pub price: i128,
+    pub confidence: f64,
+    pub participating_oracles: u32,
+    pub timestamp: u64,
+}
+
+/// Bridge transaction status
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub enum BridgeStatus {
+    Initiated = 0,
+    Completed = 1,
+    Refunded = 2,
+    Failed = 3,
+}
+
+/// Cross-chain bridge transaction
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct BridgeTransaction {
+    pub bridge_id: String,
+    pub source_chain: String,
+    pub destination_chain: String,
+    pub amount: i128,
+    pub recipient: String,
+    pub sender: Address,
+    pub created_at: u64,
+    pub status: BridgeStatus,
+    pub proof_hash: Option<String>,
+    pub completed_at: Option<u64>,
+}
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 #[repr(u32)]
 pub enum Error {
@@ -97,6 +264,39 @@ pub enum Error {
     SplitFullyFunded = 5,
     NoFundsAvailable = 6,
     InvalidAmount = 7,
+    InsuranceNotFound = 8,
+    InsuranceAlreadyExists = 9,
+    ClaimNotFound = 10,
+    InvalidClaimStatus = 11,
+    InsufficientPremium = 12,
+    InsuranceExpired = 13,
+    ParticipantNotFound = 14,
+    UserNotFound = 15,
+    InsufficientRewards = 16,
+    RewardsAlreadyClaimed = 17,
+    VerificationNotFound = 18,
+    VerificationAlreadyExists = 19,
+    InvalidVerificationStatus = 20,
+    OracleNotAuthorized = 21,
+    InsufficientOracles = 22,
+    SwapNotFound = 23,
+    SwapAlreadyExists = 24,
+    InvalidSwapStatus = 25,
+    SecretInvalid = 26,
+    SwapExpired = 27,
+    OracleNotRegistered = 28,
+    InsufficientStake = 29,
+    PriceSubmissionInvalid = 30,
+    BridgeNotFound = 31,
+    BridgeAlreadyExists = 32,
+    InvalidBridgeStatus = 33,
+    ProofInvalid = 34,
+}
+
+impl From<&Error> for soroban_sdk::Error {
+    fn from(e: &Error) -> Self {
+        soroban_sdk::Error::from_contract_error(e.to_u32())
+    }
 }
 
 /// Configuration for the contract
@@ -111,6 +311,99 @@ pub struct ContractConfig {
 
     /// Whether the contract is paused
     pub is_paused: bool,
+}
+
+// ============================================
+// Insurance Types
+// ============================================
+
+/// Status of an insurance policy
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum InsuranceStatus {
+    /// Insurance is active and providing coverage
+    Active,
+    /// Insurance has expired
+    Expired,
+    /// Insurance has been claimed and paid out
+    Claimed,
+    /// Insurance was cancelled
+    Cancelled,
+}
+
+/// Status of an insurance claim
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ClaimStatus {
+    /// Claim has been submitted and is pending review
+    Pending,
+    /// Claim has been approved and will be paid out
+    Approved,
+    /// Claim has been rejected
+    Rejected,
+    /// Claim has been paid out
+    Paid,
+}
+
+/// Insurance policy for split protection
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct InsurancePolicy {
+    /// Unique identifier for this insurance policy
+    pub insurance_id: String,
+    
+    /// The split ID being insured
+    pub split_id: String,
+    
+    /// The address that purchased the insurance
+    pub policy_holder: Address,
+    
+    /// Premium amount paid for the insurance
+    pub premium: i128,
+    
+    /// Coverage amount (maximum payout)
+    pub coverage_amount: i128,
+    
+    /// Current status of the insurance
+    pub status: InsuranceStatus,
+    
+    /// Timestamp when the insurance was purchased
+    pub created_at: u64,
+    
+    /// Timestamp when the insurance expires
+    pub expires_at: u64,
+}
+
+/// Insurance claim for split protection
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct InsuranceClaim {
+    /// Unique identifier for this claim
+    pub claim_id: String,
+    
+    /// The insurance policy ID this claim is against
+    pub insurance_id: String,
+    
+    /// The address filing the claim
+    pub claimant: Address,
+    
+    /// Reason for the claim
+    pub reason: String,
+    
+    /// Amount being claimed
+    pub claim_amount: i128,
+    
+    /// Current status of the claim
+    pub status: ClaimStatus,
+    
+    /// Timestamp when the claim was filed
+    pub filed_at: u64,
+    
+    /// Optional timestamp when the claim was processed
+    pub processed_at: Option<u64>,
+    
+    /// Optional notes about the claim decision
+    pub notes: Option<String>,
 }
 
 // ============================================
@@ -334,19 +627,3 @@ pub fn create_escrow(
     }
 }
 
-#[derive(Clone)]
-pub struct Participant {
-    pub address: Address,
-    pub amount_owed: i128,
-    pub paid: bool,
-}
-
-#[derive(Clone)]
-pub struct SplitEscrow {
-    pub split_id: String,
-    pub creator: Address,
-    pub participants: Vec<Participant>,
-    pub deadline: u64,
-    pub total_amount: i128,
-    pub active: bool,
-}

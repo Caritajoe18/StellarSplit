@@ -135,20 +135,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── Quick Actions ── */}
-        <div className="bg-card-theme rounded-xl shadow-sm p-4 sm:p-6 border border-theme mt-3 sm:mt-6">
-          <h2 className="text-lg sm:text-xl font-bold text-theme mb-4">
-            {t("dashboard.quickActions")}
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              className="inline-flex items-center justify-center min-h-[2.75rem] px-4 rounded-lg bg-blue-500 truncate text-white text-sm font-medium transition-colors hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 active:scale-[0.97] [-webkit-tap-highlight-color:transparent] select-none"
+        {/* Quick Actions */}
+        <div className="bg-card-theme rounded-lg shadow p-6 border border-theme mt-8">
+          <h2 className="text-xl font-bold text-theme mb-4">{t("dashboard.quickActions")}</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Link
+              to="/create-split"
+              className="bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition text-center"
             >
               {t("dashboard.actions.addExpense")}
-            </button>
-            <button
-              className="inline-flex items-center justify-center min-h-[2.75rem] px-4 rounded-lg bg-green-500 truncate text-white text-sm font-medium transition-colors hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2 active:scale-[0.97] [-webkit-tap-highlight-color:transparent] select-none"
-            >
+            </Link>
+            <button className="bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition">
               {t("dashboard.actions.createGroup")}
             </button>
             <button

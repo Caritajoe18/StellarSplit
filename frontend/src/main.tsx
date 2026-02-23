@@ -38,11 +38,45 @@ const router = createBrowserRouter([
           return { Component: AnalyticsDashboard };
         },
       },
+      {
+        path: "/split-groups",
+        lazy: async () => {
+          const { default: SplitGroup } =
+            await import("./pages/SplitGroup");
+          return { Component: SplitGroup };
+        },
+      },
+      {
+        path: "/history",
+        lazy: async () => {
+          const { default: SplitHistoryPage } = await import(
+            "./pages/SplitHistoryPage"
+          );
+          return { Component: SplitHistoryPage };
+        },
+      },
+
+      {
+        path: "/create-split",
+        lazy: async () => {
+          const { SplitCreationWizard } = await import(
+            "./components/SplitWizard"
+          );
+          return { Component: SplitCreationWizard };
+        },
+      },
+      {
+        path: "/notifications",
+        lazy: async () => {
+          const { default: NotificationCenterPage } = await import(
+            "./pages/NotificationCenterPage"
+          );
+          return { Component: NotificationCenterPage };
+        },
+      },
     ],
   },
 ]);
-
-
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
