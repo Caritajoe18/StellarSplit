@@ -22,5 +22,5 @@ export const ROUTES = [
   {
     to: "/notifications",
     label: "Notifications",
-  }
+  },
 ];
