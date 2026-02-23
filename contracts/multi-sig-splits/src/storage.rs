@@ -1,17 +1,16 @@
 //! # Storage Module for Multi-Signature Splits Contract
 
-use soroban_sdk::{Address, Env, String, Symbol, Vec, symbol_short};
+use soroban_sdk::{contracttype, Address, Env, String, Symbol, Vec, symbol_short};
 use crate::types::*;
 
 /// Storage keys
 const ADMIN: Symbol = symbol_short!("ADMIN");
 
 /// Storage key for multi-sig splits
-#[contracttype]
-#[derive(Clone)]
-pub enum StorageKey {
-    /// Multi-sig split by ID: split_id -> MultisigSplit
-    MultisigSplit(String),
+pub fn get_split_key(split_id: &String) -> String {
+    let mut key = String::from_str(&Env::default(), "split:");
+    key.append(&split_id);
+    key
 }
 
 /// Set the admin address
@@ -31,19 +30,19 @@ pub fn has_admin(env: &Env) -> bool {
 
 /// Check if a multi-sig split exists
 pub fn split_exists(env: &Env, split_id: &String) -> bool {
-    let key = StorageKey::MultisigSplit(split_id.clone());
+    let key = get_split_key(split_id);
     env.storage().persistent().has(&key)
 }
 
 /// Get a multi-sig split by ID
 pub fn get_split(env: &Env, split_id: &String) -> MultisigSplit {
-    let key = StorageKey::MultisigSplit(split_id.clone());
+    let key = get_split_key(split_id);
     env.storage().persistent().get(&key).unwrap()
 }
 
 /// Save a multi-sig split
 pub fn save_split(env: &Env, split: &MultisigSplit) {
-    let key = StorageKey::MultisigSplit(split.split_id.clone());
+    let key = get_split_key(&split.split_id);
     env.storage().persistent().set(&key, split);
 }
 
@@ -79,7 +78,7 @@ pub fn is_expired(env: &Env, split: &MultisigSplit) -> bool {
 }
 
 /// Update split status
-pub fn update_split_status(env: &Env, split_id: &String, status: MultisigStatus) {
+pub fn update_split_status(env: &Env, split_id: &String, status: &MultisigStatus) {
     let mut split = get_split(env, split_id);
     split.status = status;
     if status == MultisigStatus::Executed {
