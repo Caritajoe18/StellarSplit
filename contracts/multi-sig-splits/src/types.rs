@@ -1,6 +1,6 @@
 //! # Types for Multi-Signature Splits Contract
 
-use soroban_sdk::{contracterror, contracttype, Address, Env, String, Vec};
+use soroban_sdk::{contracterror, contracttype, Address, String, Vec};
 
 /// Status of a multi-signature split
 #[contracttype]

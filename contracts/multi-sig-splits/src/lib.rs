@@ -105,7 +105,7 @@ impl MultisigSplitsContract {
             return Err(MultisigError::SplitNotFound);
         }
 
-        let mut split = storage::get_split(&env, &split_id);
+        let split = storage::get_split(&env, &split_id);
 
         // Check if split is in correct state
         if split.status != MultisigStatus::Pending && split.status != MultisigStatus::Active {
@@ -122,7 +122,7 @@ impl MultisigSplitsContract {
 
         // Update status to active if this is the first signature
         if split.status == MultisigStatus::Pending {
-            storage::update_split_status(&env, &split_id, MultisigStatus::Active);
+            storage::update_split_status(&env, &split_id, &MultisigStatus::Active);
         }
 
         // Emit signature event
@@ -166,7 +166,7 @@ impl MultisigSplitsContract {
         }
 
         // Execute the split
-        storage::update_split_status(&env, &split_id, MultisigStatus::Executed);
+        storage::update_split_status(&env, &split_id, &MultisigStatus::Executed);
 
         // Emit execution event
         events::emit_split_executed(&env, &split_id);
@@ -201,7 +201,7 @@ impl MultisigSplitsContract {
         }
 
         // Cancel the split
-        storage::update_split_status(&env, &split_id, MultisigStatus::Cancelled);
+        storage::update_split_status(&env, &split_id, &MultisigStatus::Cancelled);
 
         // Emit cancellation event
         events::emit_split_cancelled(&env, &split_id, &reason);
@@ -236,7 +236,7 @@ impl MultisigSplitsContract {
         }
 
         // Execute the split immediately
-        storage::update_split_status(&env, &split_id, MultisigStatus::Executed);
+        storage::update_split_status(&env, &split_id, &MultisigStatus::Executed);
 
         // Emit override event
         events::emit_emergency_override(&env, &split_id, &admin);

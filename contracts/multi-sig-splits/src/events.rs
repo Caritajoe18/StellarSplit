@@ -1,7 +1,6 @@
 //! # Events Module for Multi-Signature Splits Contract
 
 use soroban_sdk::{Address, Env, String};
-use crate::types::*;
 
 /// Emit initialization event
 pub fn emit_initialized(env: &Env, admin: &Address) {
